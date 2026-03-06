@@ -6,7 +6,8 @@
       "Bash(cp:*)",
       "Bash(npm install:*)",
       "Bash(npm run:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

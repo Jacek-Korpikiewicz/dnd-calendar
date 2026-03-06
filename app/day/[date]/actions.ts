@@ -45,6 +45,8 @@ export async function proposeSession(date: string, slot: TimeSlot) {
 
 export async function confirmSession(sessionId: string, date: string) {
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
 
   await supabase
     .from('sessions')
@@ -57,6 +59,8 @@ export async function confirmSession(sessionId: string, date: string) {
 
 export async function deleteSession(sessionId: string, date: string) {
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
 
   await supabase.from('sessions').delete().eq('id', sessionId)
 
