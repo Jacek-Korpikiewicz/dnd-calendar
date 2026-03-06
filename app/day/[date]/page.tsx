@@ -7,11 +7,11 @@ import SessionPanel from '@/app/components/session-panel'
 export default async function DayPage({ params }: { params: Promise<{ date: string }> }) {
   const { date } = await params
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) redirect('/login')
 
   const [playerRes, availRes, sessionRes] = await Promise.all([
-    supabase.from('players').select('*').eq('id', user.id).single(),
+    supabase.from('players').select('*').eq('id', session.user.id).single(),
     supabase
       .from('availability')
       .select('*, players(display_name)')
@@ -44,7 +44,7 @@ export default async function DayPage({ params }: { params: Promise<{ date: stri
         <div className="space-y-6">
           <AvailabilityPanel
             date={date}
-            currentUserId={user.id}
+            currentUserId={session.user.id}
             availability={(availRes.data || []) as any}
           />
           <SessionPanel
