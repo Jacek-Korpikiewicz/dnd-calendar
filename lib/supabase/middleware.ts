@@ -37,5 +37,23 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
+  if (
+    user &&
+    !request.nextUrl.pathname.startsWith('/onboarding') &&
+    !request.nextUrl.pathname.startsWith('/auth')
+  ) {
+    const { data: player } = await supabase
+      .from('players')
+      .select('display_name')
+      .eq('id', user.id)
+      .single()
+
+    if (!player?.display_name) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/onboarding'
+      return NextResponse.redirect(url)
+    }
+  }
+
   return supabaseResponse
 }
