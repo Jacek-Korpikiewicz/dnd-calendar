@@ -16,10 +16,12 @@ export default async function HomePage() {
   if (!player?.display_name) redirect('/onboarding')
 
   return (
-    <main className="min-h-screen bg-amber-950">
-      <div className="text-center pt-6 pb-2">
-        <h1 className="text-3xl font-bold text-amber-100">D&amp;D on a Bus</h1>
-        <p className="text-amber-500 text-sm">Next stop: adventure</p>
+    <main className="min-h-screen pt-8">
+      <div className="text-center mb-8">
+        <h1 className="text-2xl font-bold text-amber-50 tracking-tight">
+          D&D on a Bus
+        </h1>
+        <p className="text-amber-500/60 text-sm mt-0.5">Next stop: adventure</p>
       </div>
       <CalendarGrid player={player} />
     </main>

@@ -33,15 +33,22 @@ export default async function DayPage({ params }: { params: Promise<{ date: stri
   })
 
   return (
-    <main className="min-h-screen bg-amber-950 p-4">
-      <div className="max-w-2xl mx-auto">
-        <Link href="/" className="text-amber-400 hover:text-amber-200 text-sm mb-4 inline-block">
-          &larr; Back to calendar
+    <main className="min-h-screen px-4 py-8">
+      <div className="max-w-lg mx-auto">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-amber-500/60 text-sm hover:text-amber-300 transition-colors mb-6"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8L10 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          Back to calendar
         </Link>
-        <h1 className="text-2xl font-bold text-amber-100 mb-1">{displayDate}</h1>
-        <p className="text-amber-500 text-sm mb-6">Tap slots to toggle your availability</p>
 
-        <div className="space-y-6">
+        <div className="mb-8">
+          <h1 className="text-xl font-bold text-amber-50">{displayDate}</h1>
+          <p className="text-amber-500/50 text-sm mt-0.5">Tap slots to toggle your availability</p>
+        </div>
+
+        <div className="space-y-8">
           <AvailabilityPanel
             date={date}
             currentUserId={session.user.id}

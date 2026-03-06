@@ -7,10 +7,12 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     setError('')
+    setLoading(true)
     const supabase = createClient()
 
     const { error } = await supabase.auth.signInWithOtp({
@@ -20,6 +22,7 @@ export default function LoginPage() {
       },
     })
 
+    setLoading(false)
     if (error) {
       setError(error.message)
     } else {
@@ -28,47 +31,65 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-amber-950">
-      <div className="bg-amber-100 border-2 border-amber-800 rounded-lg p-8 max-w-md w-full shadow-lg">
-        <h1 className="text-2xl font-bold text-amber-900 mb-2 text-center">
-          D&D on a Bus
-        </h1>
-        <p className="text-amber-700 text-center mb-6 text-sm">
-          Next stop: adventure
-        </p>
-
-        {sent ? (
-          <div className="text-center">
-            <p className="text-amber-900 font-medium">Check your email!</p>
-            <p className="text-amber-700 text-sm mt-2">
-              We sent a magic link to <strong>{email}</strong>
-            </p>
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-sm">
+        {/* Logo area */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-700 mb-4 shadow-lg shadow-amber-900/30">
+            <span className="text-2xl">🎲</span>
           </div>
-        ) : (
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-amber-900">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="mt-1 block w-full rounded border-amber-300 bg-amber-50 px-3 py-2 text-amber-900 focus:border-amber-600 focus:ring-amber-600"
-                placeholder="adventurer@example.com"
-              />
+          <h1 className="text-2xl font-bold text-amber-50 tracking-tight">
+            D&D on a Bus
+          </h1>
+          <p className="text-amber-500/80 text-sm mt-1">
+            Next stop: adventure
+          </p>
+        </div>
+
+        {/* Card */}
+        <div className="bg-amber-950/40 border border-amber-800/20 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
+          {sent ? (
+            <div className="text-center py-4">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-900/30 border border-green-700/30 mb-4">
+                <span className="text-xl">✉️</span>
+              </div>
+              <p className="text-amber-50 font-medium">Check your email</p>
+              <p className="text-amber-400/70 text-sm mt-2">
+                Magic link sent to <span className="text-amber-300">{email}</span>
+              </p>
             </div>
-            {error && <p className="text-red-600 text-sm">{error}</p>}
-            <button
-              type="submit"
-              className="w-full bg-amber-800 text-amber-100 py-2 rounded font-medium hover:bg-amber-700 transition-colors"
-            >
-              Send Magic Link
-            </button>
-          </form>
-        )}
+          ) : (
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-amber-300/80 mb-1.5">
+                  Email address
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full"
+                  placeholder="adventurer@example.com"
+                  autoFocus
+                />
+              </div>
+              {error && (
+                <div className="bg-red-900/20 border border-red-800/30 rounded-lg px-3 py-2">
+                  <p className="text-red-300 text-sm">{error}</p>
+                </div>
+              )}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-amber-600 to-amber-700 text-white py-2.5 rounded-xl font-medium hover:from-amber-500 hover:to-amber-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-amber-900/30"
+              >
+                {loading ? 'Sending...' : 'Send Magic Link'}
+              </button>
+            </form>
+          )}
+        </div>
       </div>
     </div>
   )

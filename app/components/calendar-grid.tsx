@@ -112,7 +112,7 @@ export default function CalendarGrid({ player }: CalendarGridProps) {
   const padding = view === 'month' ? getStartPadding(year, month) : 0
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
+    <div className="max-w-3xl mx-auto px-4 pb-8">
       <CalendarHeader
         year={year}
         month={month}
@@ -123,12 +123,16 @@ export default function CalendarGrid({ player }: CalendarGridProps) {
         onSignOut={handleSignOut}
         playerName={player.display_name || 'Adventurer'}
       />
-      <div className="grid grid-cols-7 gap-1 mb-1">
+
+      {/* Weekday labels */}
+      <div className="grid grid-cols-7 gap-1.5 mb-1.5">
         {getWeekDays().map(d => (
-          <div key={d} className="text-center text-amber-400 text-xs font-medium py-1">{d}</div>
+          <div key={d} className="text-center text-amber-500/50 text-xs font-medium py-1 uppercase tracking-wider">{d}</div>
         ))}
       </div>
-      <div className="grid grid-cols-7 gap-1">
+
+      {/* Calendar grid */}
+      <div className="grid grid-cols-7 gap-1.5">
         {Array.from({ length: padding }).map((_, i) => (
           <div key={`pad-${i}`} />
         ))}
@@ -148,12 +152,19 @@ export default function CalendarGrid({ player }: CalendarGridProps) {
           )
         })}
       </div>
-      <div className="flex gap-4 mt-4 text-xs text-amber-400 justify-center">
-        <span><span className="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1" />Morning</span>
-        <span><span className="inline-block w-2 h-2 rounded-full bg-orange-400 mr-1" />Afternoon</span>
-        <span><span className="inline-block w-2 h-2 rounded-full bg-indigo-400 mr-1" />Evening</span>
-        <span>{'\u2694\uFE0F'} Confirmed</span>
-        <span>{'\u2753'} Proposed</span>
+
+      {/* Legend */}
+      <div className="flex items-center justify-center gap-5 mt-6 text-xs text-amber-500/50">
+        <span className="flex items-center gap-1.5">
+          <span className="w-2.5 h-2.5 rounded-full bg-yellow-400" />Morning
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-2.5 h-2.5 rounded-full bg-orange-400" />Afternoon
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-2.5 h-2.5 rounded-full bg-indigo-400" />Evening
+        </span>
+        <span className="flex items-center gap-1.5">{'\u2694\uFE0F'} Session</span>
       </div>
     </div>
   )

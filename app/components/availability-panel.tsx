@@ -10,6 +10,12 @@ interface AvailabilityPanelProps {
   availability: { slot: TimeSlot; player_id: string; players: { display_name: string } }[]
 }
 
+const SLOT_ACCENTS: Record<TimeSlot, string> = {
+  morning: 'border-l-yellow-400',
+  afternoon: 'border-l-orange-400',
+  evening: 'border-l-indigo-400',
+}
+
 export default function AvailabilityPanel({ date, currentUserId, availability }: AvailabilityPanelProps) {
   const [isPending, startTransition] = useTransition()
 
@@ -22,36 +28,47 @@ export default function AvailabilityPanel({ date, currentUserId, availability }:
   }
 
   return (
-    <div className="space-y-3">
-      <h3 className="text-lg font-semibold text-amber-100">Your Availability</h3>
-      {SLOT_ORDER.map(slot => {
-        const players = playersForSlot(slot)
-        const checked = isChecked(slot)
-        return (
-          <div key={slot} className="bg-amber-900/30 rounded p-3">
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={checked}
-                  disabled={isPending}
-                  onChange={() => startTransition(() => toggleAvailability(date, slot))}
-                  className="rounded border-amber-600 text-amber-600 focus:ring-amber-500"
-                />
-                <span className="text-amber-200 font-medium">{SLOT_LABELS[slot]}</span>
-              </label>
-              <span className={`text-sm ${players.length >= 4 ? 'text-green-400 font-bold' : 'text-amber-400'}`}>
-                {players.length} player{players.length !== 1 ? 's' : ''}
-              </span>
+    <div>
+      <h3 className="text-sm font-medium text-amber-400/60 uppercase tracking-wider mb-3">Availability</h3>
+      <div className="space-y-2">
+        {SLOT_ORDER.map(slot => {
+          const players = playersForSlot(slot)
+          const checked = isChecked(slot)
+          return (
+            <div
+              key={slot}
+              className={`bg-amber-950/40 border border-amber-800/15 border-l-2 ${SLOT_ACCENTS[slot]} rounded-xl p-4 transition-all`}
+            >
+              <div className="flex items-center justify-between">
+                <label className="flex items-center gap-3 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    disabled={isPending}
+                    onChange={() => startTransition(() => toggleAvailability(date, slot))}
+                  />
+                  <span className={`font-medium ${checked ? 'text-amber-100' : 'text-amber-300/70'}`}>
+                    {SLOT_LABELS[slot]}
+                  </span>
+                </label>
+                <span className={`
+                  text-xs px-2 py-0.5 rounded-full
+                  ${players.length >= 4
+                    ? 'bg-green-600/20 text-green-400 font-semibold'
+                    : 'bg-amber-800/20 text-amber-400/60'}
+                `}>
+                  {players.length} player{players.length !== 1 ? 's' : ''}
+                </span>
+              </div>
+              {players.length > 0 && (
+                <p className="text-amber-400/50 text-sm mt-2 ml-8">
+                  {players.join(', ')}
+                </p>
+              )}
             </div>
-            {players.length > 0 && (
-              <p className="text-amber-400 text-sm mt-1 ml-6">
-                {players.join(', ')}
-              </p>
-            )}
-          </div>
-        )
-      })}
+          )
+        })}
+      </div>
     </div>
   )
 }
